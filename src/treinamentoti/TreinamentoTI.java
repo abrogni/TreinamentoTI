@@ -8,6 +8,5 @@ public class TreinamentoTI {
          //Chama a inteface gráfica
         InterfaceInicial interfaceInicial = new InterfaceInicial();
         interfaceInicial.setVisible(true);
-
     }
 }
