@@ -1,4 +1,4 @@
-package treinamentoti;
+package model.bean;
 import java.util.ArrayList;
 
 public class Participante {

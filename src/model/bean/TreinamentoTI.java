@@ -1,4 +1,4 @@
-package treinamentoti;
+package model.bean;
 import views.*;
 
 public class TreinamentoTI {

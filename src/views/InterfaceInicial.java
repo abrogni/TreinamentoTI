@@ -2,8 +2,13 @@ package views;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import treinamentoti.Participante;
-import treinamentoti.SalaEstudo;
+import model.dao.participanteDao;
+import model.bean.Participante;
+import model.bean.Sala;
+import model.bean.SalaCafe;
+import model.bean.SalaEstudo;
+import model.dao.salaCafeDao;
+import model.dao.salaEstudoDao;
 
 public class InterfaceInicial extends javax.swing.JFrame {
 
@@ -28,14 +33,14 @@ public class InterfaceInicial extends javax.swing.JFrame {
         txtLotacao = new javax.swing.JTextField();
         cadastraSala = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tabelaCafe = new javax.swing.JTable();
+        tabelaE = new javax.swing.JTable();
         guiaCadastroC = new javax.swing.JPanel();
         guiaCadastroS1 = new javax.swing.JPanel();
         txtNomeSalaC = new javax.swing.JTextField();
         txtLotacaoC = new javax.swing.JTextField();
         cadastraSalaC = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        tabelaSala = new javax.swing.JTable();
+        tabelaSalaC = new javax.swing.JTable();
         guiaConsulta = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -148,7 +153,7 @@ public class InterfaceInicial extends javax.swing.JFrame {
             }
         });
 
-        tabelaCafe.setModel(new javax.swing.table.DefaultTableModel(
+        tabelaE.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -164,10 +169,10 @@ public class InterfaceInicial extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(tabelaCafe);
-        if (tabelaCafe.getColumnModel().getColumnCount() > 0) {
-            tabelaCafe.getColumnModel().getColumn(0).setResizable(false);
-            tabelaCafe.getColumnModel().getColumn(1).setResizable(false);
+        jScrollPane2.setViewportView(tabelaE);
+        if (tabelaE.getColumnModel().getColumnCount() > 0) {
+            tabelaE.getColumnModel().getColumn(0).setResizable(false);
+            tabelaE.getColumnModel().getColumn(1).setResizable(false);
         }
 
         javax.swing.GroupLayout guiaCadastroSLayout = new javax.swing.GroupLayout(guiaCadastroS);
@@ -213,8 +218,13 @@ public class InterfaceInicial extends javax.swing.JFrame {
         txtLotacaoC.setText("Lotação");
 
         cadastraSalaC.setText("Cadastrar");
+        cadastraSalaC.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cadastraSalaCActionPerformed(evt);
+            }
+        });
 
-        tabelaSala.setModel(new javax.swing.table.DefaultTableModel(
+        tabelaSalaC.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -230,10 +240,10 @@ public class InterfaceInicial extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane3.setViewportView(tabelaSala);
-        if (tabelaSala.getColumnModel().getColumnCount() > 0) {
-            tabelaSala.getColumnModel().getColumn(0).setResizable(false);
-            tabelaSala.getColumnModel().getColumn(1).setResizable(false);
+        jScrollPane3.setViewportView(tabelaSalaC);
+        if (tabelaSalaC.getColumnModel().getColumnCount() > 0) {
+            tabelaSalaC.getColumnModel().getColumn(0).setResizable(false);
+            tabelaSalaC.getColumnModel().getColumn(1).setResizable(false);
         }
 
         javax.swing.GroupLayout guiaCadastroS1Layout = new javax.swing.GroupLayout(guiaCadastroS1);
@@ -337,11 +347,12 @@ public class InterfaceInicial extends javax.swing.JFrame {
         }        
         
         Participante participante = new Participante();
+        participanteDao dao = new participanteDao();
         participante.setNome(txtNome.getText());
         participante.setSobrenome(txtSNome.getText());
-        Participante.adicionaParticipante(participante);
+        dao.create(participante);
  
-        atualizarTabela();   
+//        atualizarTabela();   
         
         txtNome.setText(null);
         txtSNome.setText(null);
@@ -375,21 +386,45 @@ public class InterfaceInicial extends javax.swing.JFrame {
     private void cadastraSalaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastraSalaActionPerformed
 //        IMPLEMETAR HERANÇA SEXTA FEIRA
         
-//        if (txtNomeSala.getText().equals("")||txtLotacao.getText().equals("")){         
-//            JOptionPane.showMessageDialog(null, "Campo de texto vazio", "ERRO", JOptionPane.ERROR_MESSAGE);
-//            return;                    
-//        }        
-//        
-//        Sala sala = new Sala();
-//        sala.setNomeSala(txtNomeSala.getText());
-//        sala.setLotacao(Integer.parseInt(txtLotacao.getText()));
-//        SalaEstudo.adicionaSala(sala);
-// 
-//        atualizarTabela();   
-//        
-//        txtNome.setText(null);
-//        txtSNome.setText(null);
+        if (txtNomeSala.getText().equals("")||txtLotacao.getText().equals("")){         
+            JOptionPane.showMessageDialog(null, "Campo de texto vazio", "ERRO", JOptionPane.ERROR_MESSAGE);
+            return;                    
+        }        
+        
+        Sala sala = new Sala();
+        salaEstudoDao daoe = new salaEstudoDao();
+        sala.setNomeSala(txtNomeSala.getText());
+        sala.setLotacao(Integer.parseInt(txtLotacao.getText()));
+        daoe.create((SalaEstudo) sala);
+        
+//        Sala.adicionaSala(sala);
+ 
+//        atualizarTabelaEstudo();   
+        
+        txtNomeSala.setText(null);
+        txtLotacao.setText(null);
     }//GEN-LAST:event_cadastraSalaActionPerformed
+
+    private void cadastraSalaCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastraSalaCActionPerformed
+        if (txtNomeSalaC.getText().equals("")||txtLotacaoC.getText().equals("")){         
+            JOptionPane.showMessageDialog(null, "Campo de texto vazio", "ERRO", JOptionPane.ERROR_MESSAGE);
+            return;                    
+        }        
+        
+        Sala sala = new Sala();
+        salaCafeDao daoc = new salaCafeDao();
+        sala.setNomeSala(txtNomeSala.getText());
+        sala.setLotacao(Integer.parseInt(txtLotacao.getText()));
+        daoc.create((SalaCafe) sala);
+        
+//        Sala.adicionaSala(sala);
+ 
+//        atualizarTabelaEstudo();   
+        
+        txtNomeSalaC.setText(null);
+        txtLotacaoC.setText(null);
+    
+    }//GEN-LAST:event_cadastraSalaCActionPerformed
 
     //Insere os usuários cadastrados na tabela
     private void atualizarTabela() {
@@ -401,6 +436,23 @@ public class InterfaceInicial extends javax.swing.JFrame {
         }
     }
 
+    private void atualizarTabelaEstudo(){
+        DefaultTableModel dtmdadosTabela = (DefaultTableModel) tabelaE.getModel();
+        dtmdadosTabela.setRowCount(0);
+        for (Sala sala : Sala.getSala()) {
+            Object[] dados = {sala.getNomeSala(), sala.getLotacao()};
+            dtmdadosTabela.addRow(dados);
+        }
+    }
+    private void atualizarTabelaCafe(){
+        DefaultTableModel dtmdadosTabela = (DefaultTableModel) tabelaSalaC.getModel();
+        dtmdadosTabela.setRowCount(0);
+        for (Sala sala : Sala.getSala()) {
+            Object[] dados = {sala.getNomeSala(), sala.getLotacao()};
+            dtmdadosTabela.addRow(dados);
+        }
+    }
+    
     public static void main(String args[]) {
 
 
@@ -426,9 +478,9 @@ public class InterfaceInicial extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane painelGuias;
-    private javax.swing.JTable tabelaCafe;
+    private javax.swing.JTable tabelaE;
     private javax.swing.JTable tabelaParticipantes;
-    private javax.swing.JTable tabelaSala;
+    private javax.swing.JTable tabelaSalaC;
     private javax.swing.JTextField txtLotacao;
     private javax.swing.JTextField txtLotacaoC;
     private javax.swing.JTextField txtNome;
